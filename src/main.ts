@@ -10,7 +10,7 @@ async function run(): Promise<void> {
     const inputs = {
       token: core.getInput('token'),
       repository: core.getInput('repository'),
-      issueNumber: Number(core.getInput('issue-number')),
+      updateExisting: Boolean(core.getInput('update_existing')),
       title: core.getInput('title'),
       contentFilepath: core.getInput('content-filepath'),
       labels: utils.getInputAsArray('labels'),
@@ -31,17 +31,16 @@ async function run(): Promise<void> {
       })
 
       const issueNumber = await (async (): Promise<number> => {
-        if (inputs.issueNumber) {
+        if (inputs.updateExisting) {
           // Update an existing issue
-          await octokit.rest.issues.update({
+          const {data: issue} = await octokit.rest.issues.update({
             owner: owner,
             repo: repo,
-            issue_number: inputs.issueNumber,
             title: inputs.title,
             body: fileContent
           })
-          core.info(`Updated issue #${inputs.issueNumber}`)
-          return inputs.issueNumber
+          core.info(`Updated issue #${issue.issueNumber}`)
+          return issue.issueNumber
         } else {
           // Create an issue
           const {data: issue} = await octokit.rest.issues.create({
