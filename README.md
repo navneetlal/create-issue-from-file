@@ -14,7 +14,7 @@ If the file does not exist the action exits silently.
 
 ```yml
       - name: Create Issue From File
-        uses: peter-evans/create-issue-from-file@v4
+        uses: peter-evans/create-issue-from-file@v5
         with:
           title: An example issue
           content-filepath: ./example-content/output.md
@@ -27,41 +27,17 @@ If the file does not exist the action exits silently.
 
 | Name | Description | Default |
 | --- | --- | --- |
-| `token` | `GITHUB_TOKEN` or a `repo` scoped [PAT](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token). | `GITHUB_TOKEN` |
-| `repository` | The target GitHub repository. | Current repository |
-| `issue-number` | The issue number of an existing issue to update. | |
-| `title` | (**required**) The title of the issue. | |
-| `content-filepath` | The file path to the issue content. | |
-| `labels` | A comma or newline-separated list of labels. | |
-| `assignees` | A comma or newline-separated list of assignees (GitHub usernames). | |
+| `token` | `GITHUB_TOKEN` or a `repo` scoped [PAT](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) | `GITHUB_TOKEN` |
+| `repository` | The target GitHub repository | Current repository |
+| `issue-number` | The issue number of an existing issue to update | |
+| `title` | (**required**) The title of the issue | |
+| `content-filepath` | The file path to the issue content | |
+| `labels` | A comma or newline-separated list of labels | |
+| `assignees` | A comma or newline-separated list of assignees (GitHub usernames) | |
 
 ### Outputs
 
 - `issue-number` - The number of the created issue
-
-### Create a project card
-
-To create a project card for the issue, pass the `issue-number` step output to [create-or-update-project-card](https://github.com/peter-evans/create-or-update-project-card) action.
-
-```yml
-      - name: Create Issue From File
-        id: ciff
-        uses: peter-evans/create-issue-from-file@v4
-        with:
-          title: An example issue
-          content-filepath: ./example-content/output.md
-
-      - name: Create or Update Project Card
-        uses: peter-evans/create-or-update-project-card@v2
-        with:
-          project-name: My project
-          column-name: My column
-          issue-number: ${{ steps.ciff.outputs.issue-number }}
-```
-
-## Actions that pair with this action
-
-- [Link Checker](https://github.com/peter-evans/link-checker) - An action for link checking repository Markdown and HTML files
 
 ## License
 
